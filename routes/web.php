@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ContactController;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,4 +16,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function(){return view('auth.register');});
+Route::get('/', function(){return view('auth.register');})->name('signUp.page');
+Route::post('/proses-register',[AuthController::class,'register'])->name('signUp');
+Route::get('/signIn',function():View{return view('auth.login');})->name('signIn.page');
+Route::post('/proses-login',[AuthController::class,'login'])->name('signIn');
+
+Route::middleware(['auth'])->group(function(){
+    Route::get('dashboard',function():View{return view('dashboard');})->name('page.dashboard');
+    Route::get('add-contact',function():View {return view('add-contact');})->name('page.addContact');
+    Route::get('list-contact',[ContactController::class,'index'])->name('page.list-contact');
+
+    Route::get('/data-detail-user/{id}',[ContactController::class,'show']);
+
+    Route::post('add-contact-to-album',[ContactController::class,'addContact'])->name('proses.addContact');
+
+    Route::delete('delete-contact/{user_id}',[ContactController::class,'deleteContact'])->name('delete.contact');
+});

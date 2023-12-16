@@ -42,4 +42,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function noTelp()
+    {
+        return $this->hasOne(Contact::class);
+    }
+    public function albumContact()
+    {
+        return $this->hasOne(AlbumContact::class);
+    }
+
+
 }
