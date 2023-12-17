@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\UserController;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Route;
 
@@ -27,8 +29,13 @@ Route::middleware(['auth'])->group(function(){
     Route::get('list-contact',[ContactController::class,'index'])->name('page.list-contact');
 
     Route::get('/data-detail-user/{id}',[ContactController::class,'show']);
+    Route::get('/data-message/{id_penerima}',[ChatController::class,'getChat']);
 
     Route::post('add-contact-to-album',[ContactController::class,'addContact'])->name('proses.addContact');
+    Route::post('/edit-profile',[UserController::class,'edit'])->name('proses.editProfile');
+    Route::post("send-message",[ChatController::class,'sendMessage']);
+
+    Route::put('edit-message',[ChatController::class,'editMessage']);
 
     Route::delete('delete-contact/{user_id}',[ContactController::class,'deleteContact'])->name('delete.contact');
 });

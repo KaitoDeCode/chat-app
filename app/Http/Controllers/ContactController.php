@@ -21,7 +21,6 @@ class ContactController extends Controller
 
         $noTelp = "+62 ".$request->notelp;
         $contact = Contact::where('noTelp',$noTelp)->first();
-        // dd($contact);
         if($contact == null){
             toastr()->error("Nomor Telp tidak ditemukan");
             return back();
@@ -33,6 +32,7 @@ class ContactController extends Controller
             toastr()->error("Nomor Telpmu sendiri tidak bisa kamu masukan ke album");
             return back();
         }
+        // dd($user->albumContact);
 
         AlbumsToContacts::create([
             "album_id" => $user->albumContact->id,

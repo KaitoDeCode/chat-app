@@ -40,7 +40,7 @@
                         <li class="ml-3" id="contact-{{$contact->user_id}}" onclick="handleDetailContact('{{$contact->user->id}}')">
                           <a href="javascript:void(0)" class="px-4 py-3 bg-hover-light-black d-flex align-items-center chat-user bg-light" id="chat_user_1" data-user-id="1">
                             <span class="position-relative">
-                              <img src="../../dist/images/profile/user-4.jpg" alt="user-4" width="40" height="40" class="rounded-circle">
+                              <img src="{{ $contact->user->fotoProfil ? asset('storage/' . $contact->user->fotoProfil) : asset('default.jpg') }}" alt="user-4" width="40" height="40" class="rounded-circle">
                             </span>
                             <div class="ms-6 d-inline-block w-75">
                               <h6 class="mb-1 fw-semibold chat-title" data-username="James Anderson">{{$contact->user->name}}</h6>
@@ -77,30 +77,28 @@
                         </div>
                         <div class="position-relative overflow-hidden">
                           <div class="position-relative">
-                            <div id="chat-box" class="chat-box p-9" style="height: calc(100vh - 428px)" data-simplebar="init"><div class="simplebar-wrapper" style="margin: -20px;"><div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask"><div class="simplebar-offset" style="right: 0px; bottom: 0px;"><div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content" style="height: 100%; overflow: hidden scroll;"><div class="simplebar-content" style="padding: 20px;">
+                            <div id="chat-box" class="chat-box p-9" style="height: calc(100vh - 300px)" data-simplebar="init"><div class="simplebar-wrapper" style="margin: -20px;"><div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask"><div class="simplebar-offset" style="right: 0px; bottom: 0px;"><div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content" style="height: 100%; overflow: hidden scroll;"><div class="simplebar-content" style="padding: 20px;">
                               <div class="chat-list chat active-chat" data-user-id="1">
                                 <div class="hstack align-items-start mb-7 pb-1 align-items-center justify-content-between">
                                   <div class="d-flex align-items-center gap-3">
-                                    <img src="../../dist/images/profile/user-4.jpg" alt="user4" width="72" height="72" class="rounded-circle">
+                                    <img id="previewDetailContact" src="" alt="user4" width="72" height="72" class="rounded-circle">
                                     <div>
-                                      <h6 id="name" class="fw-semibold fs-4 mb-0"></h6>
-                                      <p class="mb-0">Sales Manager</p>
-                                      <p class="mb-0">Digital Arc Pvt. Ltd.</p>
+                                      <h6 id="nameDetail" class="fw-semibold fs-4 mb-0"></h6>
                                     </div>
                                   </div>
                                 </div>
                                 <div class="row">
                                   <div class="col-4 mb-7">
                                     <p class="mb-1 fs-2">Phone number</p>
-                                    <h6 id="noTelp" class="fw-semibold mb-0">+1 (203) 3458</h6>
+                                    <h6 id="noTelpDetail" class="fw-semibold mb-0">+1 (203) 3458</h6>
                                   </div>
                                   <div class="col-8 mb-7">
                                     <p class="mb-1 fs-2">Email address</p>
-                                    <h6 id="email" class="fw-semibold mb-0">alexandra@modernize.com</h6>
+                                    <h6 id="emailDetail" class="fw-semibold mb-0">alexandra@modernize.com</h6>
                                   </div>
                                 </div>
                                 <div class="d-flex align-items-center gap-2">
-                                    <button onclick="" class="btn-chat btn btn-success w-85">Chat</button>
+                                    <button onclick="handleChat()" data-bs-toggle="modal" data-bs-target="#modalChat" class="btn-chat btn btn-success w-85">Chat</button>
                                     <button onclick="handleDeleteContact()" class="btn-delete btn btn-danger w-85">Delete Contact</button>
                                 </div>
                               </div>
@@ -120,36 +118,38 @@
         @method("DELETE")
     </form>
 
-    <div id="primary-header-modal" class="modal fade" tabindex="-1" aria-labelledby="primary-header-modalLabel" style="display: none;" aria-hidden="true">
+    <div id="modalChat" class="modal fade" tabindex="-1" aria-labelledby="primary-header-modalLabel" style="display: none;" aria-hidden="true">
       <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content">
           <div class="modal-header modal-colored-header bg-primary text-white">
-            <h4 class="modal-title" id="primary-header-modalLabel">
-              Modal Heading
-            </h4>
+           <div>
+                <img style="object-fit: cover" id="foto_penerima" width="60" height="60" class="rounded-circle">
+                <span style="
+                font-size: 20px;
+                margin-left: 10px;
+            " class="fw-bold text-white" id="nama_penerima"></span>
+           </div>
+           <button class="ms-2 btn btn-warning btn-refresh">Refresh</button>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <h5 class="mt-0">Primary Background</h5>
-            <p>
-              Cras mattis consectetur purus sit amet
-              fermentum. Cras justo odio, dapibus ac facilisis
-              in, egestas eget quam. Morbi leo risus, porta ac
-              consectetur ac, vestibulum at eros.
-            </p>
-            <p>
-              Praesent commodo cursus magna, vel scelerisque
-              nisl consectetur et. Vivamus sagittis lacus vel
-              augue laoreet rutrum faucibus dolor auctor.
-            </p>
+            <div class="simplebar-content" style="padding: 20px;">
+
+                <div id="chatList" class="chat-list chat active" data-user-id="2">
+
+                </div>
+
+              </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-light" data-bs-dismiss="modal">
-              Close
-            </button>
-            <button type="button" class="btn btn-light-primary text-primary font-medium">
-              Save changes
-            </button>
+            <div class="row w-100">
+                <div class="col-8 col-md-10">
+                    <input type="text" id="message" name="message" placeholder="Your message" class="form-control">
+                </div>
+                <div class="col-2">
+                    <button id="btn-chat" class="btn-send btn btn-primary rounded">Send</button>
+                </div>
+            </div>
           </div>
         </div>
         <!-- /.modal-content -->
@@ -166,12 +166,11 @@
         // console.log(id)
         if(id > 0 ){
             handleDetailContact(id)
-
         }else{
             $("#chat-box").addClass("d-none")
-            $("#name").text("username")
-            $("#noTelp").text("tesss")
-            $("#email").text("teseses")
+            $("#nameDetail").text("username")
+            $("#noTelpDetail").text("tesss")
+            $("#emailDetail").text("teseses")
             $("#deleteContact").attr("data-user_id",id);
         }
 
@@ -179,11 +178,14 @@
             axios.get("/data-detail-user/"+id)
             .then((res)=>{
                 const user = res.data;
-                $("#name").text(user.name);
-                $("#noTelp").text(user.no_telp.noTelp);
-                $("#email").text(user.email);
+                $("#previewDetailContact").attr("src", user.fotoProfile ? `{{ asset('storage/${user.fotoProfile}') }}` : "{{asset('default.jpg')}}" );
+                $("#nameDetail").text(user.name);
+                $("#noTelpDetail").text(user.no_telp.noTelp);
+                $("#emailDetail").text(user.email);
                 $("#deleteContact").attr("data-user_id",id);
 
+                $("#foto_penerima").attr("src", user.fotoProfile ? `{{ asset('storage/${user.fotoProfile}') }}` : "{{asset('default.jpg')}}" );
+                $("#nama_penerima").text(user.name);
             })
             .catch((err)=>{
                 toastr.error(err)
@@ -204,6 +206,101 @@
                 console.log(err)
             })
         })
+
+        function getMessage(id_penerima){
+            axios.get("data-message/"+id_penerima)
+            .then((res)=>{
+                const message = res.data;
+                $("#chatList").empty()
+                $.each(message,(index,data)=>{
+
+                    if(data.id_penerima == id_penerima){
+
+                        const chatPengirim =`
+                        <div class="hstack gap-3 align-items-start mb-7 justify-content-end">
+                            <div class="text-end">
+                                <div class="option-pengirim d-flex gap-2 align-items-center">
+                                    <h6 class="fs-2 text-muted">2 hours ago</h6>
+                                    <button onclick="handleEditMessage('${data.id}','${data.message}',${data.penerima_id})" class="p-0 cursor-pointer border-0 bg-transparent">
+                                        <i class="ti ti-pencil" ></i>
+                                    </button>
+                                    <button class="p-0 cursor-pointer border-0 bg-transparent">
+                                        <i class="ti ti-trash" ></i>
+                                    </button>
+                                </div>
+                            <div class="p-2 bg-light-info text-dark rounded-1 d-inline-block fs-3">${data.message}</div>
+                            </div>
+                        </div>
+                        `
+                        $("#chatList").append(chatPengirim)
+
+                    }else{
+
+                        const pp = data.user.fotoProfile ? `{{ asset('storage/${data.user.fotoProfile}') }}` : "{{asset('default.jpg')}}"
+                        const chatPenerima = `
+                        <div class="hstack gap-3 align-items-start mb-7 justify-content-start">
+                            <img src="${pp}" alt="user8" width="40" height="40" class="rounded-circle">
+                            <div>
+                            <h6 class="fs-2 text-muted">Andrew, 2 hours ago</h6>
+                            <div class="p-2 bg-light rounded-1 d-inline-block text-dark fs-3">${data.message}</div>
+                            </div>
+                        </div>
+                        `
+                        $("#chatList").append(chatPenerima)
+                    }
+                })
+
+
+
+
+
+
+            })
+            .catch((err)=>{
+                toastr.error(err.response.data.message)
+            })
+        }
+
+        function handleChat(){
+            const penerima_id = $("#deleteContact").attr('data-user_id');
+            getMessage(penerima_id)
+        }
+
+
+        $(".btn-send").click(function(){
+            const penerima_id = $("#deleteContact").attr('data-user_id');
+            const message = $("#message").val()
+            const id = $(this).attr('data-chat_id') ?? 0;
+
+            axios.post("/send-message",{id,penerima_id,message})
+            .then((res)=>{
+                $("#message").val(null)
+                getMessage(penerima_id)
+                toastr.success(res.data.message)
+               $(this).removeAttr('data-chat_id');
+            })
+            .catch((err)=>{
+                 $(this).removeAttr('data-chat_id');
+                toastr.error(err.response.data.message)
+            })
+        })
+
+
+        function handleEditMessage(id,message,penerima_id)
+        {
+            $("#message").val(message)
+            $(".option-pengirim").empty();
+            $("#btn-chat").removeClass('btn-send')
+            $("#btn-chat").addClass('btn-edit-send')
+            $("#btn-chat").attr('data-chat_id',id)
+        }
+
+
+        $(".btn-refresh").click(function(){
+            const penerima_id = $("#deleteContact").attr('data-user_id');
+             getMessage(penerima_id)
+        })
+
 
         function handleDeleteContact(){
             $("#deleteContact").trigger("submit")

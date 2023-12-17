@@ -27,6 +27,55 @@
   </head>
   @yield('style')
   <body>
+
+
+
+    <div class="modal fade" id="modalProfile" tabindex="-1" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-header d-flex align-items-center">
+                <div class="py-3 px-7 pb-0">
+                    <h5 class="mb-0 fs-5 fw-semibold">User Profile</h5>
+                  </div>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="profile-dropdown position-relative" data-simplebar>
+
+                    <div class="d-flex align-items-center py-9 mx-7 border-bottom flex-column">
+                        <form class="d-flex flex-column" action="{{route('proses.editProfile')}}" enctype="multipart/form-data" method="post">
+                            @csrf
+                            <label for="fotoProfile">
+                                <img style="object-fit: cover" id="previewFoto"  src="{{ Auth::user()->fotoProfil ? asset('storage/' . Auth::user()->fotoProfil) : asset('default.jpg') }}" class="rounded-circle mx-auto d-block" width="80" height="80" alt="" />
+                            </label>
+                            <input class="d-none" type="file" name="fotoProfile" id="fotoProfile"  onchange="loadFile(event)">
+                      <div class="mt-3">
+                            <input class="form-control mb-2" type="text" name="name" id="name" value="{{Auth::user()->name}}">
+                            <input class="form-control mb-2" type="email" id="email" name="email" value="{{Auth::user()->email}}" readonly>
+                            <input class="form-control mb-2" type="text" name="noTelp" id="noTelp" value="{{substr(Auth::user()->noTelp->noTelp, 3)}}">
+                            <button type="submit" class="btn btn-primary w-100">Submit</button>
+                        </div>
+                    </form>
+                    </div>
+
+                    <div class="d-grid py-4 px-7 pt-8">
+
+                      <button type="button" class="btn btn-outline-primary">Log Out</button>
+                    </div>
+                  </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-light-danger text-danger font-medium waves-effect" data-bs-dismiss="modal">
+                Close
+              </button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+
+
     <!-- Preloader -->
     <div class="preloader">
       <img src="{{ asset('ChatApp.png') }}" alt="loader" class="lds-ripple img-fluid" />
@@ -43,7 +92,7 @@
         <div>
           <div class="brand-logo d-flex align-items-center justify-content-center overflow-hidden">
             <a href="{{ route('page.dashboard') }}" class="text-nowrap logo-img ">
-              <img src="{{ asset('ChatApp.png') }}" class="mx-auto d-block" style="object-fit: cover" class="" width="100" alt="" />
+              <img src="{{ asset('ChatApp.png') }}" class="mx-auto d-block" style="object-fit: cover" class="" width="100" alt="" id="fotoProfile" />
             </a>
             <div class="close-btn d-lg-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
               <i class="ti ti-x fs-8 text-muted"></i>
@@ -99,7 +148,7 @@
           <div class="fixed-profile p-3 bg-light-secondary rounded sidebar-ad mt-3">
             <div class="hstack gap-3">
               <div class="john-img">
-                <img src="{{ asset('assets/ dist/images/profile/user-1.jpg')}}" class="rounded-circle" width="40" height="40" alt="">
+                <img  class="rounded-circle" width="40" height="40" alt="">
               </div>
               <div class="john-title">
                 <h6 class="mb-0 fs-4 fw-semibold">Mathew</h6>
@@ -215,75 +264,13 @@
                     </div>
                   </li>
                   <li class="nav-item dropdown">
-                    <a class="nav-link pe-0" href="javascript:void(0)" id="drop1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a data-bs-toggle="modal" data-bs-target="#modalProfile" class="nav-link pe-0" href="javascript:void(0)" id="drop1" data-bs-toggle="dropdown" aria-expanded="false">
                       <div class="d-flex align-items-center">
                         <div class="user-profile-img">
-                          <img src="../../dist/images/profile/user-1.jpg" class="rounded-circle" width="35" height="35" alt="" />
+                          <img style="object-fit: cover" src="{{ Auth::user()->fotoProfil ? asset('storage/' . Auth::user()->fotoProfil) : asset('default.jpg') }}" class="rounded-circle" width="35" height="35" alt="" />
                         </div>
                       </div>
                     </a>
-                    <div class="dropdown-menu content-dd dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop1">
-                      <div class="profile-dropdown position-relative" data-simplebar>
-                        <div class="py-3 px-7 pb-0">
-                          <h5 class="mb-0 fs-5 fw-semibold">User Profile</h5>
-                        </div>
-                        <div class="d-flex align-items-center py-9 mx-7 border-bottom">
-                          <img src="../../dist/images/profile/user-1.jpg" class="rounded-circle" width="80" height="80" alt="" />
-                          <div class="ms-3">
-                            <h5 class="mb-1 fs-3">Mathew Anderson</h5>
-                            <span class="mb-1 d-block text-dark">Designer</span>
-                            <p class="mb-0 d-flex text-dark align-items-center gap-2">
-                              <i class="ti ti-mail fs-4"></i> info@modernize.com
-                            </p>
-                          </div>
-                        </div>
-                        <div class="message-body">
-                          <a href="page-user-profile.html" class="py-8 px-7 mt-8 d-flex align-items-center">
-                            <span class="d-flex align-items-center justify-content-center bg-light rounded-1 p-6">
-                              <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/svgs/icon-account.svg" alt="" width="24" height="24">
-                            </span>
-                            <div class="w-75 d-inline-block v-middle ps-3">
-                              <h6 class="mb-1 bg-hover-primary fw-semibold"> My Profile </h6>
-                              <span class="d-block text-dark">Account Settings</span>
-                            </div>
-                          </a>
-                          <a href="app-email.html" class="py-8 px-7 d-flex align-items-center">
-                            <span class="d-flex align-items-center justify-content-center bg-light rounded-1 p-6">
-                              <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/svgs/icon-inbox.svg" alt="" width="24" height="24">
-                            </span>
-                            <div class="w-75 d-inline-block v-middle ps-3">
-                              <h6 class="mb-1 bg-hover-primary fw-semibold">My Inbox</h6>
-                              <span class="d-block text-dark">Messages & Emails</span>
-                            </div>
-                          </a>
-                          <a href="app-notes.html" class="py-8 px-7 d-flex align-items-center">
-                            <span class="d-flex align-items-center justify-content-center bg-light rounded-1 p-6">
-                              <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/dist/images/svgs/icon-tasks.svg" alt="" width="24" height="24">
-                            </span>
-                            <div class="w-75 d-inline-block v-middle ps-3">
-                              <h6 class="mb-1 bg-hover-primary fw-semibold">My Task</h6>
-                              <span class="d-block text-dark">To-do and Daily Tasks</span>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="d-grid py-4 px-7 pt-8">
-                          <div class="upgrade-plan bg-light-primary position-relative overflow-hidden rounded-4 p-4 mb-9">
-                            <div class="row">
-                              <div class="col-6">
-                                <h5 class="fs-4 mb-3 w-50 fw-semibold text-dark">Unlimited Access</h5>
-                                <button class="btn btn-primary text-white">Upgrade</button>
-                              </div>
-                              <div class="col-6">
-                                <div class="m-n4">
-                                  <img src="../../dist/images/backgrounds/unlimited-bg.png" alt="" class="w-100">
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <a href="authentication-login.html" class="btn btn-outline-primary">Log Out</a>
-                        </div>
-                      </div>
-                    </div>
                   </li>
                 </ul>
               </div>
@@ -318,6 +305,11 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     {{-- <script src="{{ asset('utils/handleToaster.js') }}"></script> --}}
+
+    <script>
+    var loadFile = function(event) {
+        var output = document.getElementById('previewFoto'); output.src = URL.createObjectURL(event.target.files[0]); output.onload = function() { URL.revokeObjectURL(output.src)
+        } }; </script>
 
     @yield('script')
 

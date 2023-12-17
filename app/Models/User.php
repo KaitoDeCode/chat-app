@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -51,6 +52,13 @@ class User extends Authenticatable
     {
         return $this->hasOne(AlbumContact::class);
     }
+
+    public function chats()
+    {
+        return $this->hasMany(Chat::class);
+    }
+
+
 
 
 }
