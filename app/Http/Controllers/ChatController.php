@@ -73,8 +73,12 @@ class ChatController extends Controller
 
     }
 
-    protected function editMessage(Request $request)
+    protected function deleteMessage($id)
     {
+        // dd($id);
+        Chat::find($id)->delete();
+        
+        return response()->json(["message"=>"berhasil menghapus chat"]);
 
     }
 }

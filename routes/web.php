@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\UserController;
+use App\Models\Chat;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Route;
 
@@ -36,6 +37,8 @@ Route::middleware(['auth'])->group(function(){
     Route::post("send-message",[ChatController::class,'sendMessage']);
 
     Route::put('edit-message',[ChatController::class,'editMessage']);
+
+    Route::delete('delete-message/{id}',[ChatController::class,'deleteMessage']);
 
     Route::delete('delete-contact/{user_id}',[ContactController::class,'deleteContact'])->name('delete.contact');
 });

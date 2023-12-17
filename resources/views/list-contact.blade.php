@@ -178,13 +178,14 @@
             axios.get("/data-detail-user/"+id)
             .then((res)=>{
                 const user = res.data;
-                $("#previewDetailContact").attr("src", user.fotoProfile ? `{{ asset('storage/${user.fotoProfile}') }}` : "{{asset('default.jpg')}}" );
+                console.log(user.fotoProfil)
+                $("#previewDetailContact").attr("src", user.fotoProfil ? `{{ asset('storage/${user.fotoProfil}') }}` : "{{asset('default.jpg')}}" ).css("object-fit",'cover');
                 $("#nameDetail").text(user.name);
                 $("#noTelpDetail").text(user.no_telp.noTelp);
                 $("#emailDetail").text(user.email);
                 $("#deleteContact").attr("data-user_id",id);
 
-                $("#foto_penerima").attr("src", user.fotoProfile ? `{{ asset('storage/${user.fotoProfile}') }}` : "{{asset('default.jpg')}}" );
+                $("#foto_penerima").attr("src", user.fotoProfil ? `{{ asset('storage/${user.fotoProfil}') }}` : "{{asset('default.jpg')}}" );
                 $("#nama_penerima").text(user.name);
             })
             .catch((err)=>{
@@ -242,7 +243,7 @@
                                     <button onclick="handleEditMessage('${data.id}','${data.message}',${data.penerima_id})" class="p-0 cursor-pointer border-0 bg-transparent">
                                         <i class="ti ti-pencil" ></i>
                                     </button>
-                                    <button class="p-0 cursor-pointer border-0 bg-transparent">
+                                    <button onclick="handleDeleteMessage('${data.id}','${data.id_penerima}')" class="p-0 cursor-pointer border-0 bg-transparent">
                                         <i class="ti ti-trash" ></i>
                                     </button>
                                 </div>
@@ -255,7 +256,7 @@
                     }else{
                         console.log(message);
                         const user = res.data.penerima;
-                        const pp = user.fotoProfile ? `{{ asset('storage/${user.fotoProfile}') }}` : "{{asset('default.jpg')}}" ;
+                        const pp = user.fotoProfil ? `{{ asset('storage/${user.fotoProfil}') }}` : "{{asset('default.jpg')}}" ;
                         // const pp = data.user.fotoProfile ? `{{ asset('storage/${data.user.fotoProfile}') }}` : "{{asset('default.jpg')}}"
                         const chatPenerima = `
                         <div class="hstack gap-3 align-items-start mb-7 justify-content-start">
@@ -304,6 +305,17 @@
                 toastr.error(err.response.data.message)
             })
         })
+
+        function handleDeleteMessage(id,id_penerima){
+            axios.delete("delete-message/"+id)
+            .then(res=>{
+                toastr.success(res.data.message)
+                getMessage(id_penerima)
+            })
+            .catch(err=>{
+                toastr.error(err.response.data.message)
+            })
+        }
 
 
         function handleEditMessage(id,message,penerima_id)
