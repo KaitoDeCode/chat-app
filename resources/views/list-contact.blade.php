@@ -207,20 +207,38 @@
             })
         })
 
+        function getTimeAgo(timestamp) {
+    const currentTimestamp = Date.now();
+    const timeDiffInSeconds = Math.floor((currentTimestamp - timestamp) / 1000);
+
+    if (timeDiffInSeconds < 60) {
+        return `${timeDiffInSeconds} seconds ago`;
+    } else if (timeDiffInSeconds < 3600) {
+        const minutes = Math.floor(timeDiffInSeconds / 60);
+        return `${minutes} minutes ago`;
+    } else if (timeDiffInSeconds < 86400) {
+        const hours = Math.floor(timeDiffInSeconds / 3600);
+        return `${hours} hours ago`;
+    } else {
+        const days = Math.floor(timeDiffInSeconds / 86400);
+        return `${days} days ago`;
+    }
+}
+
         function getMessage(id_penerima){
             axios.get("data-message/"+id_penerima)
             .then((res)=>{
-                const message = res.data;
+                const message = res.data.message;
                 $("#chatList").empty()
                 $.each(message,(index,data)=>{
-
+                    const timestamp = Date.parse(data.created_at);
                     if(data.id_penerima == id_penerima){
 
                         const chatPengirim =`
                         <div class="hstack gap-3 align-items-start mb-7 justify-content-end">
                             <div class="text-end">
                                 <div class="option-pengirim d-flex gap-2 align-items-center">
-                                    <h6 class="fs-2 text-muted">2 hours ago</h6>
+                                    <h6 class="fs-2 text-muted">${getTimeAgo(timestamp)}</h6>
                                     <button onclick="handleEditMessage('${data.id}','${data.message}',${data.penerima_id})" class="p-0 cursor-pointer border-0 bg-transparent">
                                         <i class="ti ti-pencil" ></i>
                                     </button>
@@ -235,13 +253,15 @@
                         $("#chatList").append(chatPengirim)
 
                     }else{
-
-                        const pp = data.user.fotoProfile ? `{{ asset('storage/${data.user.fotoProfile}') }}` : "{{asset('default.jpg')}}"
+                        console.log(message);
+                        const user = res.data.penerima;
+                        const pp = user.fotoProfile ? `{{ asset('storage/${user.fotoProfile}') }}` : "{{asset('default.jpg')}}" ;
+                        // const pp = data.user.fotoProfile ? `{{ asset('storage/${data.user.fotoProfile}') }}` : "{{asset('default.jpg')}}"
                         const chatPenerima = `
                         <div class="hstack gap-3 align-items-start mb-7 justify-content-start">
                             <img src="${pp}" alt="user8" width="40" height="40" class="rounded-circle">
                             <div>
-                            <h6 class="fs-2 text-muted">Andrew, 2 hours ago</h6>
+                            <h6 class="fs-2 text-muted">${user.name}, ${getTimeAgo(timestamp)}</h6>
                             <div class="p-2 bg-light rounded-1 d-inline-block text-dark fs-3">${data.message}</div>
                             </div>
                         </div>

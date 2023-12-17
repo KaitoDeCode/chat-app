@@ -19,8 +19,13 @@ class ChatController extends Controller
                   ->where('id_penerima', auth()->user()->id);
         })->orderBy('created_at', 'asc')->get();
 
+        $penerima = User::find($id_penerima);
+
         // dd($chat);
-        return response()->json($chat);
+        return response()->json([
+            "message" => $chat,
+            "penerima" => $penerima,
+        ]);
     }
 
     protected function sendMessage(Request $request){
